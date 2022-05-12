@@ -27,6 +27,24 @@ class MainViewModel @Inject constructor(private val repository: Repository,appli
         getPopularMoviesData(apiKey)
     }
 
+    fun getTeluguMovies(apiKey: String) = viewModelScope.launch {
+        getTeluguMoviesData(apiKey)
+    }
+
+    private suspend fun getTeluguMoviesData(apiKey: String) {
+        popularMoviesResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()){
+            try {
+                val response = repository.remote.getTeluguMovies(apiKey)
+                popularMoviesResponse.value = handleTeluguMoviesResponse(response)
+                Log.e("logged",response.body()?.movies.toString())
+            }catch (e : Exception){
+                Log.e("logged",e.message.toString())
+                popularMoviesResponse.value = NetworkResult.Error("movies not found.")
+            }
+        }
+    }
+
     private suspend fun getPopularMoviesData(apiKey: String) {
         popularMoviesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
@@ -53,8 +71,29 @@ class MainViewModel @Inject constructor(private val repository: Repository,appli
             }
 
             response.isSuccessful -> {
-                val foodRecipe = response.body()
-                return NetworkResult.Success(foodRecipe?.movies!!)
+                val movieData = response.body()
+                return NetworkResult.Success(movieData?.movies!!)
+            }
+
+            else -> {
+                return NetworkResult.Error(response.message())
+            }
+        }
+    }
+
+    private fun handleTeluguMoviesResponse(response: Response<GetMoviesResponse>): NetworkResult<List<Movie>>? {
+        when {
+            response.message().toString().contains("timeout") -> {
+                return NetworkResult.Error("Timeout")
+            }
+
+            response.code() == 402 -> {
+                return NetworkResult.Error("API Key Limited")
+            }
+
+            response.isSuccessful -> {
+                val movieData = response.body()
+                return NetworkResult.Success(movieData?.movies!!)
             }
 
             else -> {

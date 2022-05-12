@@ -1,8 +1,7 @@
 package com.example.moviedbexampletest
 
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MoviesApi {
 
@@ -12,5 +11,11 @@ interface MoviesApi {
         @Query("page") page: Int
     ): Response<GetMoviesResponse>
 
+    @GET("discover/movie")
+    suspend fun getTeluguMovies(
+        @Query("api_key") apiKey: String = MovieConstants.API_KEY,
+        @Query("language") language : String,
+        @Query("region") region : String
+    ): Response<GetMoviesResponse>
 
 }

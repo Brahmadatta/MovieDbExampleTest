@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setUpRecyclerView()
 
         mainViewModel.getPopularMovies(MovieConstants.API_KEY)
+        mainViewModel.getTeluguMovies(MovieConstants.API_KEY)
         getApiData()
     }
 
