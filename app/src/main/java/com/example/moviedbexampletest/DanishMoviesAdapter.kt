@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviedbexampletest.TeluguMoviesAdapter.ViewHolder.Companion.VIEW_TYPE_TELUGU
+import com.example.moviedbexampletest.DanishMoviesAdapter.ViewHolder.Companion.VIEW_TYPE_HINDI
 import com.example.moviedbexampletest.databinding.MoviesRowLayoutBinding
 
-class TeluguMoviesAdapter (private val onClick: (String) -> Unit) : RecyclerView.Adapter<TeluguMoviesAdapter.ViewHolder>() {
+class DanishMoviesAdapter (private val onClick: (String) -> Unit): RecyclerView.Adapter<DanishMoviesAdapter.ViewHolder>() {
 
     private var movie = emptyList<Movie>()
 
@@ -19,8 +19,7 @@ class TeluguMoviesAdapter (private val onClick: (String) -> Unit) : RecyclerView
         }
 
         companion object {
-            const val VIEW_TYPE_TELUGU = 1114
-
+            const val VIEW_TYPE_HINDI = 1111
             fun from(parent: ViewGroup) : ViewHolder{
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = MoviesRowLayoutBinding.inflate(layoutInflater)
@@ -43,7 +42,7 @@ class TeluguMoviesAdapter (private val onClick: (String) -> Unit) : RecyclerView
     }
 
     override fun getItemViewType(position: Int): Int {
-        return VIEW_TYPE_TELUGU
+        return VIEW_TYPE_HINDI
     }
 
     fun setData(newData : List<Movie>){

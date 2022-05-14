@@ -9,8 +9,13 @@ class RemoteDataSource @Inject constructor(val moviesApi: MoviesApi) {
         return moviesApi.getPopularMovies(apiKey,10)
     }
 
+    suspend fun getDanishMovies(apiKey: String) : Response<GetMoviesResponse>{
+        //return moviesApi.getTeluguMovies(apiKey)
+        return moviesApi.getMoviesWithLanguage(apiKey,"da","US")
+    }
+
     suspend fun getTeluguMovies(apiKey: String) : Response<GetMoviesResponse>{
         //return moviesApi.getTeluguMovies(apiKey)
-        return moviesApi.getTeluguMovies(apiKey,"hi-IN","IN")
+        return moviesApi.getMoviesWithLanguage(apiKey,"TE-IN","IN")
     }
 }
