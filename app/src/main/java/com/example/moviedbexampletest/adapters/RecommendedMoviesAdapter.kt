@@ -1,13 +1,15 @@
-package com.example.moviedbexampletest
+package com.example.moviedbexampletest.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviedbexampletest.MoviesAdapter.ViewHolder.Companion.VIEW_TYPE
+import com.example.moviedbexampletest.models.Movie
+import com.example.moviedbexampletest.MovieDiffUtil
+import com.example.moviedbexampletest.adapters.RecommendedMoviesAdapter.ViewHolder.Companion.VIEW_TYPE
 import com.example.moviedbexampletest.databinding.MoviesRowLayoutBinding
 
-class MoviesAdapter( private val onClick: (String) -> Unit
+class RecommendedMoviesAdapter(private val onClick: (String) -> Unit
 ) : RecyclerView.Adapter<MoviesViewHolder>() {
 
     private var movie = emptyList<Movie>()

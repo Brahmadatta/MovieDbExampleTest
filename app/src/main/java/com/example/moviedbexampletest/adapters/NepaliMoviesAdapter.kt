@@ -1,13 +1,15 @@
-package com.example.moviedbexampletest
+package com.example.moviedbexampletest.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviedbexampletest.DanishMoviesAdapter.ViewHolder.Companion.VIEW_TYPE_HINDI
+import com.example.moviedbexampletest.models.Movie
+import com.example.moviedbexampletest.MovieDiffUtil
+import com.example.moviedbexampletest.adapters.NepaliMoviesAdapter.ViewHolder.Companion.VIEW_TYPE
 import com.example.moviedbexampletest.databinding.MoviesRowLayoutBinding
 
-class DanishMoviesAdapter (private val onClick: (String) -> Unit): RecyclerView.Adapter<DanishMoviesAdapter.ViewHolder>() {
+class NepaliMoviesAdapter : RecyclerView.Adapter<NepaliMoviesAdapter.ViewHolder>() {
 
     private var movie = emptyList<Movie>()
 
@@ -19,8 +21,9 @@ class DanishMoviesAdapter (private val onClick: (String) -> Unit): RecyclerView.
         }
 
         companion object {
-            const val VIEW_TYPE_HINDI = 1111
-            fun from(parent: ViewGroup) : ViewHolder{
+            const val VIEW_TYPE = 1112
+
+            fun from(parent: ViewGroup) : ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = MoviesRowLayoutBinding.inflate(layoutInflater)
                 return ViewHolder(binding)
@@ -42,7 +45,7 @@ class DanishMoviesAdapter (private val onClick: (String) -> Unit): RecyclerView.
     }
 
     override fun getItemViewType(position: Int): Int {
-        return VIEW_TYPE_HINDI
+        return VIEW_TYPE
     }
 
     fun setData(newData : List<Movie>){

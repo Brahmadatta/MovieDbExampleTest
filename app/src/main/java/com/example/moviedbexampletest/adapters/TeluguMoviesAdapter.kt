@@ -1,10 +1,12 @@
-package com.example.moviedbexampletest
+package com.example.moviedbexampletest.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviedbexampletest.TeluguMoviesAdapter.ViewHolder.Companion.VIEW_TYPE_TELUGU
+import com.example.moviedbexampletest.models.Movie
+import com.example.moviedbexampletest.MovieDiffUtil
+import com.example.moviedbexampletest.adapters.TeluguMoviesAdapter.ViewHolder.Companion.VIEW_TYPE_TELUGU
 import com.example.moviedbexampletest.databinding.MoviesRowLayoutBinding
 
 class TeluguMoviesAdapter (private val onClick: (String) -> Unit) : RecyclerView.Adapter<TeluguMoviesAdapter.ViewHolder>() {
@@ -21,7 +23,7 @@ class TeluguMoviesAdapter (private val onClick: (String) -> Unit) : RecyclerView
         companion object {
             const val VIEW_TYPE_TELUGU = 1114
 
-            fun from(parent: ViewGroup) : ViewHolder{
+            fun from(parent: ViewGroup) : ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = MoviesRowLayoutBinding.inflate(layoutInflater)
                 return ViewHolder(binding)

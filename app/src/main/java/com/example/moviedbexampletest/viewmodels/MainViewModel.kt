@@ -8,8 +8,8 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.moviedbexampletest.GetMoviesResponse
-import com.example.moviedbexampletest.Movie
+import com.example.moviedbexampletest.models.GetMoviesResponse
+import com.example.moviedbexampletest.models.Movie
 import com.example.moviedbexampletest.Repository
 import com.example.moviedbexampletest.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,12 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: Repository,application: Application) : AndroidViewModel(application) {
 
-    val popularMoviesResponse : MutableLiveData<NetworkResult<List<Movie>>> = MutableLiveData()
+    val recommendedMoviesResponse : MutableLiveData<NetworkResult<List<Movie>>> = MutableLiveData()
     val popularTeluguMoviesResponse : MutableLiveData<NetworkResult<List<Movie>>> = MutableLiveData()
     val popularDanishMoviesResponse : MutableLiveData<NetworkResult<List<Movie>>> = MutableLiveData()
+    val popularNepaliMoviesResponse : MutableLiveData<NetworkResult<List<Movie>>> = MutableLiveData()
 
-    fun getPopularMovies(apiKey : String) = viewModelScope.launch {
-        getPopularMoviesData(apiKey)
+    fun getRecommendedMovies(apiKey : String) = viewModelScope.launch {
+        getRecommendedMoviesData(apiKey)
     }
 
     fun getMoviesWithLanguageTelugu(apiKey: String) = viewModelScope.launch {
@@ -34,6 +35,9 @@ class MainViewModel @Inject constructor(private val repository: Repository,appli
 
     fun getMoviesWithLanguageDanish(apiKey: String) = viewModelScope.launch {
         getDanishMoviesData(apiKey)
+    }
+    fun getMoviesWithLanguageNepali(apiKey: String) = viewModelScope.launch {
+            getNepaliMoviesData(apiKey)
     }
 
     private suspend fun getTeluguMoviesData(apiKey: String) {
@@ -64,17 +68,32 @@ class MainViewModel @Inject constructor(private val repository: Repository,appli
         }
     }
 
-    private suspend fun getPopularMoviesData(apiKey: String) {
-        popularMoviesResponse.value = NetworkResult.Loading()
+    private suspend fun getNepaliMoviesData(apiKey: String) {
+        popularNepaliMoviesResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()){
+            try {
+                val response = repository.remote.getNepaliMovies(apiKey)
+                popularNepaliMoviesResponse.value = handleNepaliMoviesResponse(response)
+                Log.e("loggednepali",response.body()?.movies.toString())
+            }catch (e : Exception){
+                Log.e("logged",e.message.toString())
+                popularNepaliMoviesResponse.value = NetworkResult.Error("movies not found.")
+            }
+        }
+    }
+
+    private suspend fun getRecommendedMoviesData(apiKey: String) {
+        recommendedMoviesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
-                val response = repository.remote.getMovies(apiKey)
-                popularMoviesResponse.value = handlePopularMoviesResponse(response)
+                val response = repository.remote.getRecommendedMovies(apiKey)
+                recommendedMoviesResponse.value = handlePopularMoviesResponse(response)
+                Log.e("recommendedmovies",response.body()?.movies.toString())
                 //Log.e("TAG", "getPopularMoviesData: "+response )
                 //popularMoviesResponse.value = handlePopularMoviesResponse(response)
             }catch (e : Exception) {
                 Log.e("logged",e.message.toString())
-                popularMoviesResponse.value = NetworkResult.Error("movies not found.")
+                recommendedMoviesResponse.value = NetworkResult.Error("movies not found.")
             }
         }
     }
@@ -122,6 +141,27 @@ class MainViewModel @Inject constructor(private val repository: Repository,appli
     }
 
     private fun handleDanishMoviesResponse(response: Response<GetMoviesResponse>): NetworkResult<List<Movie>>? {
+        when {
+            response.message().toString().contains("timeout") -> {
+                return NetworkResult.Error("Timeout")
+            }
+
+            response.code() == 402 -> {
+                return NetworkResult.Error("API Key Limited")
+            }
+
+            response.isSuccessful -> {
+                val movieData = response.body()
+                return NetworkResult.Success(movieData?.movies!!)
+            }
+
+            else -> {
+                return NetworkResult.Error(response.message())
+            }
+        }
+    }
+
+    private fun handleNepaliMoviesResponse(response: Response<GetMoviesResponse>): NetworkResult<List<Movie>>? {
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")

@@ -1,4 +1,4 @@
-package com.example.moviedbexampletest
+package com.example.moviedbexampletest.util
 
 import retrofit2.Retrofit
 

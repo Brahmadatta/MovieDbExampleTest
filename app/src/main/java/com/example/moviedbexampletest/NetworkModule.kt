@@ -1,5 +1,6 @@
 package com.example.moviedbexampletest
 
+import com.example.moviedbexampletest.util.MovieConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -3,6 +3,7 @@ package com.example.moviedbexampletest
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.example.moviedbexampletest.util.MovieConstants
 
 class MoviesRowBinding {
 
